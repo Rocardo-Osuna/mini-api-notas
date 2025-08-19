@@ -18,6 +18,7 @@ Implementé una estructura mínima con los dos modelos esenciales para una app d
 
 - Un modelo de usuario personalizado
 - Un modelo de nota
+- El body trabaja con JSON
 
 Ambos modelos están registrados en el panel de administración (`admin`) de Django
 
@@ -61,6 +62,11 @@ Agregare a futuro una opcion exclusiva para editar nombre y contraseña, actualm
 - `GET /api/notas/estadisticas/`  
   Devuelve estadísticas sobre las notas del usuario y sus categorías
 
+- `POST /api/usuarios/cambiar_username/`
+  Endpoint para modificar el username, necesitas enviar "nuevo_username" 
+
+- `POST /api/usuarios/cambiar_password/`
+  Endpoint para cambiar contraseña, requiere "nuevo_password1" y "nuevo_password2" para validar que este bien escrito
 
 ## Pytest
 

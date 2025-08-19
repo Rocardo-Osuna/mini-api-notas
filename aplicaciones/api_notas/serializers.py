@@ -10,8 +10,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'username','password','nombre', 'apellidoP', 'apellidoM', 'email']
-
+        fields = ['url', 'username','password','nombre', 'apellidoP', 'apellidoM', 'email'] #El metodo get no funciona, 
+                                                                                            #debes usar el endpoint de usuario/perfil
+                                                                                            #el url lo deje de prueba no funciona
     def create(self, validated_data):
         password = validated_data.pop('password')
         user = self.Meta.model(**validated_data)
@@ -20,7 +21,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        validated_data.pop('username', None)
+        validated_data.pop('username', None) #No disponible el cambio de uername en patch y put
         password = validated_data.pop('password', None)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -37,3 +38,24 @@ class NotaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Nota
         fields = ['url','id', 'usuario', 'titulo', 'contenido', 'categoria', 'fecha_creacion', 'activo']
+
+
+
+class CambiarUsernameSerializer(serializers.Serializer):
+    nuevo_username = serializers.CharField(required=True)
+
+    def validate_nuevo_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Este username ya existe")
+        return value
+    
+
+class CambiarPasswordSerializer(serializers.Serializer):
+    nuevo_password1 = serializers.CharField(required=True)
+    nuevo_password2 = serializers.CharField(required=True)
+
+    def validate(self, data):
+        if data['nuevo_password1'] != data['nuevo_password2']:
+            raise serializers.ValidationError("Las contraseñas no coinciden")
+        return data
+    

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer, NotaSerializer
+from .serializers import UserSerializer, NotaSerializer, CambiarUsernameSerializer, CambiarPasswordSerializer
 from rest_framework import mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -34,6 +34,29 @@ class UsuarioViewSet(mixins.CreateModelMixin,
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+    
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def cambiar_username(self, request):
+        serializer = CambiarUsernameSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        request.user.username = serializer.validated_data['nuevo_username']
+        request.user.save()
+
+        return Response({'status': 'Username actualizado correctamente'}, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def cambiar_password(self, request):
+        serializer = CambiarPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        nuevo_password = serializer.validated_data['nuevo_password1']
+        request.user.set_password(nuevo_password)
+        request.user.save()
+
+        return Response({'status': 'Contraseña actualizada correctamente'}, status=status.HTTP_200_OK)
+
+        
     
 
 class NotaViewSet(viewsets.ModelViewSet):
