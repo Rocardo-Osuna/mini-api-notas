@@ -41,7 +41,11 @@ Utilicé viewsets para manejar los endpoints
 - `PATCH /api/usuarios/perfil/`  
   Modificar parcialmente el perfil
 
-Agregare a futuro una opcion exclusiva para editar nombre y contraseña, actualmente se puede hacer con path y put
+- `POST /api/usuarios/cambiar_username/`
+  Endpoint para modificar el username, necesitas enviar "nuevo_username" 
+
+- `POST /api/usuarios/cambiar_password/`
+  Endpoint para cambiar contraseña, requiere "nuevo_password1" y "nuevo_password2" para validar que este bien escrito
 
 
 ### Notas
@@ -62,13 +66,10 @@ Agregare a futuro una opcion exclusiva para editar nombre y contraseña, actualm
 - `GET /api/notas/estadisticas/`  
   Devuelve estadísticas sobre las notas del usuario y sus categorías
 
-- `POST /api/usuarios/cambiar_username/`
-  Endpoint para modificar el username, necesitas enviar "nuevo_username" 
-
-- `POST /api/usuarios/cambiar_password/`
-  Endpoint para cambiar contraseña, requiere "nuevo_password1" y "nuevo_password2" para validar que este bien escrito
 
 ## Pytest
 
 Incluye pruebas automatizadas con **Pytest**, ubicadas en la carpeta del proyecto de api_notas
+
+
 
